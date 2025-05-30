@@ -5,16 +5,18 @@ from time import sleep
 class AnimationController():
     def __init__(self, animations: list[BaseAnimation] = [], 
                  target_duration: float = 30.0, 
-                 speed_multiplier: float = 1.0):
+                 speed_multiplier: float = 1.0,
+                 fallback_framerate: float = 30.0):
         self.animations: list[BaseAnimation] = animations
         self.target_duration: float          = target_duration
         self.speed_multiplier: float         = speed_multiplier
+        self.fallback_framerate: float       = fallback_framerate
         self.is_running                      = True
 
     def _extract_params(self,  animation: BaseAnimation) -> tuple[str, float, float, float]:
         params = animation.get_params()
         name        = str(params.get("NAME", "Unkown Animation"))
-        framerate   = max(1.0, min(180, float(params.get("FPS", 30.0))))
+        framerate   = max(1.0, min(180, float(params.get("FPS", self.fallback_framerate))))
         interval    = 1/framerate
         duration    = max(1.0, float(params.get("DURATION", self.target_duration)))
         return(name, interval, framerate, duration)

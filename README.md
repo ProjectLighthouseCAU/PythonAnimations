@@ -23,7 +23,7 @@ Each class also needs to provide a 'get_params()' function which returns a dicti
   - Tells the animation controller how fast the animation is to be run. If not provided, a default value is used.
 - "NAME": str
   - Tells the animation controller how the animation is named. Needed for useful console output/logging.
-- "LENGTH": int | float
+- "DURATION": int | float
   - Unit: Seconds
   - Provides the animation controller with the exact length of the animation. Useful for scrolling texts 
     that have a certain, set length. If not set, a default value from the animation controller will be used.

@@ -16,6 +16,8 @@ The animations to be imported need to be classes.
 Each class needs to provide a 'get_frame()' function, which then generates a frame and then increase
 the simulation by a timestep.
 The return value of the get_frame function needs to be of the format list[list[tuple[int, int, int]]].  
+
+A reset() function shall be provided which resets the inner state of the animation to the initial state.
   
 Each class also needs to provide a 'get_params()' function which returns a dictionary with optional parameters:
 - "FPS": int | float
@@ -27,3 +29,5 @@ Each class also needs to provide a 'get_params()' function which returns a dicti
   - Unit: Seconds
   - Provides the animation controller with the exact length of the animation. Useful for scrolling texts 
     that have a certain, set length. If not set, a default value from the animation controller will be used.
+
+An animation will be given x_size, y_size parameters when initialized. Standard values are x_size=14, y_size=28.

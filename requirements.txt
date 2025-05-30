@@ -1,0 +1,5 @@
+msgpack
+websocket-client
+numpy
+pillow
+tk

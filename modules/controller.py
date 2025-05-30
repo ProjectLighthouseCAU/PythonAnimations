@@ -16,7 +16,7 @@ class AnimationController():
         name        = str(params.get("NAME", "Unkown Animation"))
         framerate   = max(1.0, min(180, float(params.get("FPS", 30.0))))
         interval    = 1/framerate
-        duration    = max(1.0, float(params.get("DURATION", 30.0)))
+        duration    = max(1.0, float(params.get("DURATION", self.target_duration)))
         return(name, interval, framerate, duration)
     
     def _send_to_lh(self, frame: list[list[tuple[int, int, int]]]) -> None:
@@ -26,9 +26,9 @@ class AnimationController():
     def _handle_animation(self, animation: BaseAnimation) -> None:
         name, interval, framerate, duration = self._extract_params(animation)
         print(f"Playing animation {name} for {duration} seconds...")
-        stop_after_frames = duration // framerate
+        stop_after_frames = duration // (framerate * self.speed_multiplier)
         frame_count       = 0
-        frame_timer       = Timer(interval)
+        frame_timer       = Timer(interval / self.speed_multiplier)
         while self.is_running and frame_count < stop_after_frames:
             frame = animation.get_frame()
             if not frame or not type(frame) == list[list[tuple[int, int, int]]]: 

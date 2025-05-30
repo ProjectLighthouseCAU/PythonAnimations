@@ -5,7 +5,7 @@ from modules.controller import AnimationController
 def main(gui: bool, remote: bool, fps: int, time_per_anim: int):
     user = getenv("LIGHTHOUSE_USER", None)
     token = getenv("LIGHTHOUSE_TOKEN", None)
-    if not user or token:
+    if remote and not (user and token):
         # TODO: Load user and token from file if not present as environment variables
         pass    
     

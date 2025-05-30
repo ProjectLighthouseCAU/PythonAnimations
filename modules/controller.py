@@ -6,7 +6,9 @@ class AnimationController():
     def __init__(self, animations: list[BaseAnimation] = [], 
                  target_duration: float = 30.0, 
                  speed_multiplier: float = 1.0,
-                 fallback_framerate: float = 30.0):
+                 fallback_framerate: float = 30.0,
+                 lh_display_instance = None,
+                 pyghthouse_instance = None):
         self.animations: list[BaseAnimation] = animations
         self.target_duration: float          = target_duration
         self.speed_multiplier: float         = speed_multiplier

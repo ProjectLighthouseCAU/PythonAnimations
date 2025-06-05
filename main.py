@@ -1,6 +1,8 @@
 import sys
 from os import getenv
 from modules.controller import AnimationController
+from pyghthouse.ph import Pyghthouse
+from modules.lh_display import Display
 
 def main(gui: bool, remote: bool, fps: int, time_per_anim: int):
     user = getenv("LIGHTHOUSE_USER", None)
@@ -14,21 +16,27 @@ def main(gui: bool, remote: bool, fps: int, time_per_anim: int):
     
     display = None
     if gui:
-        # TODO: instantiate the LighthouseDisplay if gui is enabled
+        display = Display(fps)
         pass
     
     pyghthouse = None
-    if remote:
-        # TODO: instantiate pyghthouse if remote is enabled
-        pass
+    if remote and user and token:
+        pyghthouse = Pyghthouse(user, token, frame_rate=fps)
+        pyghthouse.start()
     
     controller = AnimationController(animations=animations,
                                      target_duration=time_per_anim,
                                      speed_multiplier=1.0,
                                      fallback_framerate=fps,
-                                     lh_display_instance=display,
-                                     pyghthouse_instance=pyghthouse)
+                                     local_display=display,
+                                     pyghthouse_adapter=pyghthouse)
     controller.run()
+    
+    if pyghthouse:
+        pyghthouse.stop()
+        
+    if display:
+        display.stop()
 
 
 def print_usage():

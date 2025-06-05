@@ -1,5 +1,7 @@
 from modules.base_animation import BaseAnimation
 from modules.timer import Timer
+from pyghthouse.ph import Pyghthouse
+from modules.lh_display import Display
 from time import sleep
 
 class AnimationController():
@@ -7,13 +9,15 @@ class AnimationController():
                  target_duration: float = 30.0, 
                  speed_multiplier: float = 1.0,
                  fallback_framerate: float = 30.0,
-                 lh_display_instance = None,
-                 pyghthouse_instance = None):
+                 local_display: Display | None = None,
+                 pyghthouse_adapter: Pyghthouse | None = None):
         self.animations: list[BaseAnimation] = animations
         self.target_duration: float          = target_duration
         self.speed_multiplier: float         = speed_multiplier
         self.fallback_framerate: float       = fallback_framerate
         self.is_running                      = True
+        self.pyghthouse_adapter              = pyghthouse_adapter
+        self.local_display                   = local_display
 
     def _extract_params(self,  animation: BaseAnimation) -> tuple[str, float, float, float]:
         params = animation.get_params()
@@ -24,8 +28,10 @@ class AnimationController():
         return(name, interval, framerate, duration)
     
     def _send_to_lh(self, frame: list[list[tuple[int, int, int]]]) -> None:
-        # TODO: Implement
-        pass
+        if self.pyghthouse_adapter:
+            self.pyghthouse_adapter.set_image(frame)
+        if self.local_display:
+            self.local_display.send_frame(frame)
 
     def _handle_animation(self, animation: BaseAnimation) -> None:
         name, interval, framerate, duration = self._extract_params(animation)

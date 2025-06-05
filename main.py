@@ -4,15 +4,22 @@ from modules.controller import AnimationController
 from pyghthouse.ph import Pyghthouse
 from modules.lh_display import Display
 
-def main(gui: bool, remote: bool, fps: int, time_per_anim: int):
+
+ANIMATION_COLLECTIONS = {
+    "standard": [],
+}
+
+def main(gui: bool, remote: bool, fps: int, time_per_anim: int, collection: str | None):
     user = getenv("LIGHTHOUSE_USER", None)
     token = getenv("LIGHTHOUSE_TOKEN", None)
     if remote and not (user and token):
         # TODO: Load user and token from file if not present as environment variables
         pass    
     
-    animations = [] 
-    # TODO: Implement fetching/import of animations. Maybe use files for configuration?
+    animations = ANIMATION_COLLECTIONS.get(collection or "standard", [])
+    if not animations:
+        print(f"Error: Animation collection {collection} was not found!")
+        exit(1)
     
     display = None
     if gui:
@@ -52,6 +59,7 @@ if __name__ == "__main__":
         gui = False
         remote = True
         fps = 60
+        collection = None
         for argument in sys.argv:
             if '--local' in argument:
                 gui = True
@@ -60,6 +68,8 @@ if __name__ == "__main__":
                 gui = True
             elif '--fps=' in argument and len(argument) > 6 and str(argument).split('=')[1].isnumeric():
                 fps = int(str(argument).split('=')[1])
-        main(gui, remote, fps, time_per_anim)
+            elif '--collection=' in argument and len(argument) > 13:
+                collection = str(argument).split('=')[1]
+        main(gui, remote, fps, time_per_anim, collection)
     else:
         print_usage()

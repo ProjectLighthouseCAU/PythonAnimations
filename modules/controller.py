@@ -2,22 +2,23 @@ from modules.base_animation import BaseAnimation
 from modules.timer import Timer
 from pyghthouse.ph import Pyghthouse
 from modules.lh_display import Display
+from typing import Sequence
 from time import sleep
 
 class AnimationController():
-    def __init__(self, animations: list[BaseAnimation] = [], 
+    def __init__(self, animations: Sequence[BaseAnimation] = [], 
                  target_duration: float = 30.0, 
                  speed_multiplier: float = 1.0,
                  fallback_framerate: float = 30.0,
                  local_display: Display | None = None,
                  pyghthouse_adapter: Pyghthouse | None = None):
-        self.animations: list[BaseAnimation] = animations
-        self.target_duration: float          = target_duration
-        self.speed_multiplier: float         = speed_multiplier
-        self.fallback_framerate: float       = fallback_framerate
-        self.is_running                      = True
-        self.pyghthouse_adapter              = pyghthouse_adapter
-        self.local_display                   = local_display
+        self.animations         = animations
+        self.target_duration    = target_duration
+        self.speed_multiplier   = speed_multiplier
+        self.fallback_framerate = fallback_framerate
+        self.is_running         = True
+        self.pyghthouse_adapter = pyghthouse_adapter
+        self.local_display      = local_display
 
     def _extract_params(self,  animation: BaseAnimation) -> tuple[str, float, float, float]:
         params = animation.get_params()
@@ -41,11 +42,16 @@ class AnimationController():
         frame_timer       = Timer(interval / self.speed_multiplier)
         while self.is_running and frame_count < stop_after_frames:
             frame = animation.get_frame()
-            if not frame or not type(frame) == list[list[tuple[int, int, int]]]: 
+            if not frame: 
+                print("Error: No Frame!")
                 return
+            #if not type(frame) == list[list[tuple[int, int, int]]]:
+            #    print(f"Error: Frame has wrong format {type(frame)}")
+            #    return
             self._send_to_lh(frame)
             sleep(frame_timer.remaining_time())
             frame_timer.reset()
+        sleep(5)
 
     def _main_loop(self):
         while self.is_running:

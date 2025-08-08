@@ -1,4 +1,4 @@
-import color_functions as clr
+from animations import color_functions as clr
 import math, random
 from modules.base_animation import BaseAnimation
 
@@ -98,7 +98,7 @@ class BounceAnimation(BaseAnimation):
         for _ in range(5):
             self._add_rand_orb()
 
-    def get_frame(self):
+    def get_frame(self) -> list[list[tuple[int, int, int]]]:
         for x in range(len(self.matrix)):
             for y in range(len(self.matrix[0])):
                 self.matrix[x][y] = clr.shift(clr.decay(self.matrix[x][y], 0.1), 0)

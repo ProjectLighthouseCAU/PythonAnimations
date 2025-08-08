@@ -60,9 +60,11 @@ class _DisplayProcess(multiprocessing.Process):
         while self.fps > 60:
             self.fps /= 2
         self.display = None
+        print("Display process initialized.")
 
     def run(self):
         self.display = _LocalDisplay(self.framequeue, self.stop_event, self.fps)
+        print("Display process started.")
         self.display.mainloop()
 
     def stop(self):

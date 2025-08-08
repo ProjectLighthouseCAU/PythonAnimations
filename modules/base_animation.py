@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple, Dict, Union
+from typing import Union
 
 class BaseAnimation(ABC):
     def __init__(self, x_size: int = 14, y_size: int = 28):
@@ -7,7 +7,7 @@ class BaseAnimation(ABC):
         self.y_size = y_size
 
     @abstractmethod
-    def get_frame(self) -> List[List[Tuple[int, int, int]]]:
+    def get_frame(self) -> list[list[tuple[int, int, int]]]:
         """
         Generates the next frame and continues the inner state of the animation by a timestep.
 
@@ -17,7 +17,7 @@ class BaseAnimation(ABC):
         pass
 
     @abstractmethod
-    def get_params(self) -> Dict[str, Union[int, float, str]]:
+    def get_params(self) -> dict[str, Union[int, float, str]]:
         """
         Returns a dictionary with parameters.
         {

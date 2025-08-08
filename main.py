@@ -3,10 +3,12 @@ from os import getenv
 from modules.controller import AnimationController
 from pyghthouse.ph import Pyghthouse
 from modules.lh_display import Display
-
+from animations.a_bounce import BounceAnimation
 
 ANIMATION_COLLECTIONS = {
-    "standard": [],
+    "standard": [
+            BounceAnimation()
+        ],
 }
 
 def main(gui: bool, remote: bool, fps: int, time_per_anim: int, collection: str | None):
@@ -24,7 +26,7 @@ def main(gui: bool, remote: bool, fps: int, time_per_anim: int, collection: str 
     display = None
     if gui:
         display = Display(fps)
-        pass
+        display.start()
     
     pyghthouse = None
     if remote and user and token:
